@@ -294,6 +294,10 @@
         <div id="timer">00:00:00</div>
       </div>
     </div>
+    <button onclick="if(confirm('Möchtest du das Rätsel wirklich von vorne starten?')) resetGame()" 
+                style="background:none; border:none; color:var(--muted); font-family:'JetBrains Mono',monospace; font-size:10px; text-decoration:underline; cursor:pointer; padding:2px 0;">
+          [Reset]
+        </button>
     <div style="padding:24px 22px 40px; flex:1;" id="gameBody"></div>
   </section>
 
