@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Dreikönigs-Fall">
+<title>Der Dreikönigs-Diebstahl &ndash; Köln-Krimi-Rallye</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0f111a;
+    --surface: #191c28;
+    --border: #2b3042;
+    --amber: #d3a24f;
+    --amber-dim: #8a6c34;
+    --red: #b23a3a;
+    --paper: #ece7da;
+    --muted: #8b8e9c;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--paper);
+    font-family:'Inter',sans-serif;
+    min-height:100vh;
+    min-height:100dvh;
+    display:flex;
+    justify-content:center;
+    padding: env(safe-area-inset-top) 0 env(safe-area-inset-bottom) 0;
+  }
+  #app{
+    width:100%;
+    max-width:480px;
+    min-height:100dvh;
+    display:flex;
+    flex-direction:column;
+    position:relative;
+  }
+  .screen{
+    display:none;
+    flex-direction:column;
+    flex:1;
+    padding:28px 22px 40px;
+    animation: fadein .35s ease;
+  }
+  .screen.active{display:flex;}
+  @keyframes fadein{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);}}
+
+  h1,h2,h3{font-family:'Playfair Display',serif; margin:0 0 12px; color:var(--paper); letter-spacing:.2px;}
+  h1{font-size:25px; line-height:1.25;}
+  h2{font-size:21px;}
+  p{line-height:1.65; font-size:15px; color:#d8d4c8; margin:0 0 14px;}
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace;
+    font-size:11px;
+    letter-spacing:1.5px;
+    text-transform:uppercase;
+    color:var(--amber);
+    margin-bottom:10px;
+  }
+
+  .btn{
+    display:block;
+    width:100%;
+    text-align:center;
+    background:transparent;
+    border:1.5px solid var(--amber);
+    color:var(--amber);
+    font-family:'Inter',sans-serif;
+    font-weight:600;
+    font-size:15px;
+    letter-spacing:.3px;
+    padding:15px 18px;
+    border-radius:2px;
+    cursor:pointer;
+    transition: background .15s ease, transform .1s ease;
+    text-decoration:none;
+  }
+  .btn:active{transform:scale(.98);}
+  .btn.primary{background:var(--amber); color:#1a1408;}
+  .btn.ghost{border-color:var(--border); color:var(--muted);}
+  .btn + .btn{margin-top:10px;}
+
+  .card{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:2px;
+    padding:20px;
+    margin-bottom:16px;
+    position:relative;
+  }
+
+  .rules-list{list-style:none; padding:0; margin:0;}
+  .rules-list li{
+    display:flex; gap:12px;
+    padding:12px 0;
+    border-bottom:1px solid var(--border);
+    font-size:14px;
+    color:#d8d4c8;
+    line-height:1.5;
+  }
+  .rules-list li:last-child{border-bottom:none;}
+  .rules-list .num{
+    font-family:'JetBrains Mono',monospace;
+    color:var(--amber);
+    flex-shrink:0;
+    width:20px;
+  }
+
+  .tabs{display:flex; gap:3px; margin-bottom:22px; flex-wrap:wrap;}
+  .tab{
+    font-family:'JetBrains Mono',monospace;
+    font-size:10px;
+    width:26px;
+    height:22px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:var(--surface);
+    border:1px solid var(--border);
+    color:var(--muted);
+    border-radius:2px;
+  }
+  .tab.done{background:var(--amber); color:#1a1408; border-color:var(--amber);}
+  .tab.current{border-color:var(--amber); color:var(--amber);}
+
+  #gameHeader{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:16px 22px;
+    border-bottom:1px solid var(--border);
+    background:var(--bg);
+  }
+  #gameHeader .label{font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:1.5px; color:var(--muted); text-transform:uppercase;}
+  #timer{font-family:'JetBrains Mono',monospace; font-size:20px; font-weight:600; color:var(--amber);}
+
+  .riddle-box{
+    font-family:'JetBrains Mono',monospace;
+    font-size:14.5px;
+    line-height:1.8;
+    background:#0b0d14;
+    border:1px dashed var(--border);
+    padding:16px;
+    color:var(--amber);
+    margin-bottom:16px;
+  }
+  .onsite-tag{
+    display:inline-block;
+    font-family:'JetBrains Mono',monospace;
+    font-size:10px;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    color:var(--red);
+    border:1px solid var(--red);
+    padding:3px 8px;
+    border-radius:2px;
+    margin-bottom:12px;
+  }
+
+  input[type=text]{
+    width:100%;
+    background:#0b0d14;
+    border:1px solid var(--border);
+    color:var(--paper);
+    font-family:'Inter',sans-serif;
+    font-size:16px;
+    padding:14px;
+    border-radius:2px;
+    margin-bottom:10px;
+  }
+  input[type=text]:focus{outline:none; border-color:var(--amber);}
+
+  .error-msg{
+    color:var(--red);
+    font-size:13px;
+    margin:-4px 0 12px;
+    display:none;
+    font-family:'JetBrains Mono',monospace;
+  }
+
+  .hint-toggle{
+    background:none; border:none; color:var(--muted);
+    font-family:'JetBrains Mono',monospace; font-size:12px;
+    text-decoration:underline; cursor:pointer; padding:6px 0; margin-bottom:8px;
+  }
+  .hint-text{display:none; font-size:13px; color:var(--muted); font-style:italic; margin:-4px 0 14px;}
+
+  .coord-box{
+    background:#0b0d14;
+    border:1px solid var(--amber-dim);
+    border-radius:2px;
+    padding:14px 16px;
+    margin-bottom:14px;
+  }
+  .coord-box .coord-label{font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:1px; color:var(--muted); text-transform:uppercase; margin-bottom:6px;}
+  .coord-value{
+    font-family:'JetBrains Mono',monospace;
+    font-size:17px;
+    color:var(--paper);
+    word-break:break-all;
+    margin-bottom:4px;
+  }
+  .coord-dist{font-size:12px; color:var(--muted); margin-bottom:12px;}
+  .coord-actions{display:flex; gap:8px;}
+  .coord-actions button, .coord-actions a{
+    flex:1;
+    font-family:'Inter',sans-serif;
+    font-size:13px;
+    font-weight:600;
+    text-align:center;
+    padding:11px 8px;
+    border-radius:2px;
+    border:1px solid var(--border);
+    background:transparent;
+    color:var(--paper);
+    cursor:pointer;
+    text-decoration:none;
+  }
+  .coord-actions .copied{border-color:var(--amber); color:var(--amber);}
+
+  .stamp{
+    position:absolute;
+    top:14px; right:14px;
+    border:3px solid var(--red);
+    color:var(--red);
+    font-family:'JetBrains Mono',monospace;
+    font-weight:700;
+    font-size:13px;
+    letter-spacing:1px;
+    padding:4px 10px;
+    transform:rotate(-9deg);
+    border-radius:3px;
+    opacity:0;
+  }
+  .stamp.show{ animation: stamp-in .4s cubic-bezier(.3,1.6,.5,1) forwards; }
+  @keyframes stamp-in{
+    0%{opacity:0; transform:rotate(-9deg) scale(2.4);}
+    60%{opacity:1;}
+    100%{opacity:1; transform:rotate(-9deg) scale(1);}
+  }
+
+  footer.credit{
+    text-align:center; font-family:'JetBrains Mono',monospace; font-size:10px;
+    color:var(--border); padding:14px 0 4px;
+  }
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- WILLKOMMEN -->
+  <section class="screen active" id="screen-welcome">
+    <div class="eyebrow">Kölner Polizeidirektion &middot; Akte D-1164</div>
+    <h1>Das Brauhaus-Komplotts</h1>
+    <p>Heute Nacht ist im Traditionsbrauhaus "Früh am Dom" das unbezahlbare, goldene Original-Brauereisiegel aus der Gründerzeit verschwunden &ndash; das historische Prachtstück, das seit vielen Jahren die Kölner Biergeschichte feiert und gut behütet im Zappes-Beichtgestühl ausgestellt war.</p>
+    <p>Dem langjährigen Köbes Anton kommt das Ganze verdächtig vor: Schon früher gab es Versuche, an die geheimen Rezepte und Schätze des Brauhauses zu gelangen. Diesmal soll der Dieb jedoch nicht ungeschoren davonkommen. Er bittet dich diskret um Hilfe, bevor die Sache für Unruhe sorgt.</p>
+    <p>Die Spur des Täters führt quer durch die Kölner Altstadt &ndash; von geschichtsträchtigen Brauhaus-Ecken zu den großen Wahrzeichen der Stadt. An jedem Ort wartet ein Rätsel, das sich nur lösen lässt, wenn du wirklich dort stehst.</p>
+    <div style="flex:1"></div>
+    <button class="btn primary" onclick="showScreen('rules')">Zu den Ermittlungsregeln</button>
+  </section>
+
+  <!-- REGELN -->
+  <section class="screen" id="screen-rules">
+    <div class="eyebrow">Vor der Ermittlung</div>
+    <h2>Ermittlungsregeln</h2>
+    <ul class="rules-list">
+      <li><span class="num">01</span> 10 Rätsel führen dich zu echten Orten in der Kölner Altstadt &ndash; jede Station liegt maximal 1,5&nbsp;km von der vorherigen entfernt.</li>
+      <li><span class="num">02</span> Jedes Rätsel dreht sich um ein Detail, das du nur vor Ort sehen kannst. Ohne den Ort zu besuchen, gibt es keine Chance auf die Lösung.</li>
+      <li><span class="num">03</span> Sobald du auf Start tippst, läuft die Zeit &ndash; bis das letzte Rätsel gelöst ist.</li>
+      <li><span class="num">04</span> Nach jedem gelösten Rätsel bekommst du GPS-Koordinaten für den nächsten Ort. Kopiere sie per Knopfdruck und füge sie in Google Maps ein.</li>
+      <li><span class="num">05</span> Die App braucht keinen Standortzugriff, kein Internet unterwegs und keine Anmeldung.</li>
+      <li><span class="num">06</span> Euer Fortschritt bleibt gespeichert, auch wenn ihr die App zwischendurch schließt.</li>
+    </ul>
+    <div style="flex:1"></div>
+    <button class="btn primary" onclick="startGame()">Ermittlung starten</button>
+    <button class="btn ghost" onclick="showScreen('welcome')">Zurück</button>
+  </section>
+
+  <!-- SPIEL -->
+  <section class="screen" id="screen-game" style="padding:0;">
+    <div id="gameHeader">
+      <div>
+        <div class="label">Akte D-1164</div>
+        <div class="tabs" id="tabs"></div>
+      </div>
+      <div style="text-align:right;">
+        <div class="label">Ermittlungszeit</div>
+        <div id="timer">00:00:00</div>
+      </div>
+    </div>
+    <div style="padding:24px 22px 40px; flex:1;" id="gameBody"></div>
+  </section>
+
+  <!-- FINALE -->
+  <section class="screen" id="screen-finished">
+    <div class="eyebrow">Fall abgeschlossen</div>
+    <h1 id="finishedTitle">Der Fall ist gelöst</h1>
+    <div class="card" id="finishedStory"></div>
+    <div class="card" style="text-align:center;">
+      <div class="eyebrow" style="margin-bottom:4px;">Gesamtzeit</div>
+      <div style="font-family:'JetBrains Mono',monospace; font-size:32px; color:var(--amber); font-weight:600;" id="finalTime">00:00:00</div>
+    </div>
+    <div style="flex:1"></div>
+    <button class="btn ghost" onclick="resetGame()">Neue Ermittlung starten</button>
+  </section>
+
+  <footer class="credit">Köln-Krimi-Rallye &middot; läuft lokal im Browser</footer>
+</div>
+
+<script>
+/* ============================================================
+   INHALT: Echte Kölner Orte mit verifizierten Fakten.
+   Jedes Rätsel ist so gebaut, dass die Antwort nur vor Ort
+   sichtbar/prüfbar ist (Zählen, Lesen, Beobachten).
+   Passt die Route jederzeit an eure Zielgruppe an - Distanzen
+   zwischen den Stationen liegen aktuell alle unter 1,5 km.
+   ============================================================ */
+const PUZZLES = [
+  {
+    distFromPrev: null,
+    scene: "Du betrittst das geschäftige Treiben des Brauhauses 'Früh am Dom'. Zwischen dem Klirren von Kölschgläsern und dem Duft von Halve Hahn wartet Köbes Pitter auf dich. Er wischt nervös über die Theke. 'Hück Naach hat einer minge joldene Brauhausschlüssel jeklaut!', flüstert er dir zu. Er zeigt auf einen historischen hölzernen Kölsch-Kranz, der als Deko an der Wand hängt. Darauf ist das stolze Gründungsjahr der Brauerei verewigt. 'Dä Dieb hat mir en Notiz hingerloof – als Quersumme vum Jründungsjahr!'",
+    onsite: "Finde das Gründungsjahr der Brauerei 'Früh am Dom' heraus (z. B. auf Schildern, Bierdeckeln oder der Speisekarte).",
+    riddle: "In welchem Jahr wurde die Brauerei Früh gegründet? Addiere die vier Ziffern dieser Jahreszahl, um die Quersumme zu erhalten.",
+    hint: "Das Früh am Dom wurde im Jahr 1904 gegründet. Rechne 1+9+0+4.",
+    answers: ["14"],
+    solved: "14 - richtig. Köbes Pitter atmet auf und gibt dir einen Zettel, den der Dieb verloren hat: Es ist eine Quittung für ein Vorhängeschloss. Die Spur führt an den Rhein, zur Brücke der Liebenden.",
+    nextCoords: {lat:"50.941436", lon:"6.965784", label:"Hohenzollernbrücke", distKm:"0,3"}
+  },
+  {
+    scene: "An der Hohenzollernbrücke hängen hunderttausende Liebesschlösser am Geländer, seit 2008 ein fester Kölner Brauch. Doch dich interessiert etwas anderes: die Brücke selbst, direkt neben dir.",
+    onsite: "Steh auf dem Fuß- und Radweg der Brücke und zähle die Bahngleise",
+    riddle: "Wie viele Eisenbahngleise verlaufen parallel über die Hohenzollernbrücke? Du kannst sie zählen, während Fuß- und Radweg an beiden Seiten verlaufen.",
+    hint: "Die Brücke besteht aus drei nebeneinanderliegenden Brückenteilen für den Bahnverkehr.",
+    answers: ["6", "sechs"],
+    solved: "6 Gleise - korrekt. Ein Wachmann erinnert sich an einen Mann, der letzte Nacht auffällig lange am Geländer stand, aber kein Schloss anbrachte. Er lief in Richtung der Altstadt, zur Kirche mit dem hohen Turm über dem Rhein.",
+    nextCoords: {lat:"50.938583", lon:"6.961562", label:"Groß St. Martin", distKm:"0,5"}
+  },
+  {
+    scene: "Groß St. Martin ist mit seinem markanten Vierungsturm eines der Wahrzeichen der Altstadt und war bis 1880 das höchste Bauwerk Kölns. Steh so, dass du den quadratischen Hauptturm gut siehst.",
+    onsite: "Blick von der Rheinseite oder vom Fischmarkt auf den Turm",
+    riddle: "Um den quadratischen Hauptturm gruppieren sich kleinere Ecktürmchen. Wie viele sind es?",
+    hint: "An jeder der vier Ecken des Hauptturms sitzt eines.",
+    answers: ["4", "vier"],
+    solved: "4 Ecktürmchen - genau richtig. Am Fuß der Kirche, wo die alten Häuser fast ins Wasser reichen, soll der Mann zuletzt gesehen worden sein.",
+    nextCoords: {lat:"50.938305", lon:"6.962103", label:"Fischmarkt", distKm:"0,1"}
+  },
+  {
+    scene: "Der Fischmarkt war jahrhundertelang das Zentrum des Kölner Fischhandels - direkt am Rhein, wo die Fänge angelandet wurden. Ein Anwohner deutet auf eine kleine Infotafel am Platz.",
+    onsite: "Suche die Infotafel oder frage nach der Bedeutung des Platznamens",
+    riddle: "Wonach ist dieser Platz benannt - welche Ware wurde hier früher direkt von den Booten verkauft?",
+    hint: "Der Name des Platzes verrät es dir bereits.",
+    answers: ["fisch", "fische"],
+    solved: "FISCH - richtig. Eine Souvenirverkäuferin auf dem Weg zum Alter Markt erinnert sich an den Mann: Er blieb lange vor dem großen Brunnen mit der Reiterstatue stehen und murmelte etwas von einer Frau namens Griet.",
+    nextCoords: {lat:"50.938624", lon:"6.960016", label:"Jan-von-Werth-Brunnen, Alter Markt", distKm:"0,15"}
+  },
+  {
+    scene: "Der Jan-von-Werth-Brunnen auf dem Alter Markt erzählt eine der bekanntesten Kölner Liebeslegenden: Ein armer Knecht wird von einer Magd verschmäht, zieht in den Krieg und kehrt als hochdekorierter General zurück - zu spät für die Liebe.",
+    onsite: "Lies die Inschrift oder das Hinweisschild am Brunnen",
+    riddle: "Wie heißt die Frau, die Jan von Werths Heiratsantrag einst ablehnte und ihn Jahre später als General bereute, ihn verschmäht zu haben?",
+    hint: "Ihr Name reimt sich auf 'Diet' und beginnt mit G.",
+    answers: ["griet"],
+    solved: "GRIET - richtig. Ein Kellner am Platz erinnert sich, dass derselbe Mann kurz darauf nach oben zu einem Hausdach schaute und lachte - genau dorthin, wo eine besonders freche Kölner Figur sitzt.",
+    nextCoords: {lat:"50.938129", lon:"6.960485", label:"Kallendresser, Alter Markt 24", distKm:"0,07"}
+  },
+  {
+    scene: "Hoch oben am Haus Alter Markt 24 sitzt der Kallendresser - eine der bekanntesten frechen Figuren Kölns, seit 1957 vom Bildhauer Ewald Mataré geschaffen.",
+    onsite: "Schau nach oben zum Dach von Haus Nr. 24",
+    riddle: "Welchen Körperteil streckt die Figur allen Passanten und besonders der Obrigkeit am Rathaus gegenüber entgegen?",
+    hint: "Sein Name bedeutet übersetzt in etwa 'Regenrinnenscheißer'.",
+    answers: ["hintern", "den hintern", "po", "gesäss", "gesäß", "hinterteil", "der hintern"],
+    solved: "Der nackte Hintern - genau. Ein Marktstandbetreiber will den Mann kurz danach beim Rathaus gesehen haben, wo er sich eine ganze Weile den Turm mit den vielen Figuren angeschaut hat.",
+    nextCoords: {lat:"50.938492", lon:"6.959320", label:"Historisches Rathaus, Rathausturm", distKm:"0,1"}
+  },
+  {
+    scene: "Der Rathausturm trägt 124 Figuren bedeutender Kölner Persönlichkeiten. Direkt unter der Turmuhr sitzt eine ganz besondere hölzerne Fratzenfigur.",
+    onsite: "Schau unter die Turmuhr am Rathausturm (am besten zur vollen Stunde)",
+    riddle: "Zur vollen Stunde öffnet diese geschnitzte Figur den Mund und streckt die Zunge heraus. Wie heißt sie im Kölschen?",
+    hint: "Der Name beginnt mit 'Platz' - er 'jabbeckt' (schwatzt/reckt die Zunge) zur vollen Stunde.",
+    answers: ["platzjabbeck", "der platzjabbeck"],
+    solved: "PLATZJABBECK - richtig! Ein Wachmann am Rathaus erinnert sich jetzt genau: Der Mann trug eine Tasche mit dem Logo eines bekannten Duftmuseums und roch stark nach einem süßlichen Parfum.",
+    nextCoords: {lat:"50.937721", lon:"6.958082", label:"Duftmuseum im Farina-Haus", distKm:"0,12"}
+  },
+  {
+    scene: "Im Farina-Haus wurde 1709 das Original Eau de Cologne erfunden - die älteste noch produzierende Parfümfabrik der Welt. Bis heute trägt jede Flasche ein bestimmtes Symbol als Zeichen für Reinheit und Qualität.",
+    onsite: "Schau ins Schaufenster oder auf die Flaschen im Verkaufsraum",
+    riddle: "Welches Symbol ziert seit der Gründung jede Flasche des Original Eau de Cologne aus diesem Haus?",
+    hint: "Es ist eine Blume - damals selten und teuer, heute das Markenzeichen.",
+    answers: ["tulpe", "die tulpe", "eine tulpe", "rote tulpe"],
+    solved: "Die rote TULPE - korrekt. Der Verkäufer erinnert sich an einen hastigen Kunden, der nach dem Weg zurück zum Dom fragte. Die Spur führt dich fast zurück zum Ausgangspunkt.",
+    nextCoords: {lat:"50.941278", lon:"6.958281", label:"Domvorplatz (Roncalliplatz)", distKm:"0,4"}
+  },
+  {
+    scene: "Zurück auf dem Domvorplatz. Der Kölner Dom ist eine der am längsten gebauten Kathedralen der Welt - Grundsteinlegung 1248, doch die Türme wurden erst 1880 vollendet.",
+    onsite: "Steh vor dem Dom und blicke an der Fassade nach oben",
+    riddle: "Wie viele Jahre lagen zwischen der Grundsteinlegung 1248 und der Vollendung der Türme 1880?",
+    hint: "Rechne 1880 minus 1248.",
+    answers: ["632", "632 jahre"],
+    solved: "Richtig! Unglaubliche 632 Jahre hat es gedauert. Stell dir das mal vor: Fast 300 Jahre davon stand der Dom als Bauruine in der Stadt – mit einem riesigen, hölzernen Baukran auf dem unfertigen Südturm, der das Kölner Stadtbild über Jahrhunderte prägte. Erst im 19. Jahrhundert packte die Kölner der Ehrgeiz, ihr Meisterwerk nach den mittelalterlichen Originalplänen zu Ende zu bringen. Als die Spitzen 1880 endlich fertig waren, war der Dom für ein paar Jahre sogar das höchste Gebäude der Welt! Ein echtes Denkmal kölscher Ausdauer.",
+    nextCoords: {lat:"50.941278", lon:"6.958281", label:"Domvorplatz (Roncalliplatz)", distKm:"0"}
+  },
+  {
+    scene: "Genau in diesem Moment siehst du ihn: einen Mann, der sich am Rand der Domplatte auffällig unauffällig verhält - eine Tasche mit Farina-Logo über der Schulter. Domwächterin Berger reicht dir einen zerknitterten Zettel, den sie ihm aus der Tasche fallen sah. Darauf steht, rückwärts geschrieben, ein Name.",
+    onsite: "Löse den letzten Hinweis und stelle dich dem Täter",
+    riddle: "Auf dem Zettel steht rückwärts: NELEHT PPUJ. Wie lautet der Name richtig herum? (Vor- und Nachname)",
+    hint: "Lies die beiden Wörter jeweils von hinten nach vorne.",
+    answers: ["jupp thelen", "thelen jupp"],
+    solved: "Ihr habt den Dieb geschnappt! Jupp Thelen wurde überführt. Herzlichen Glückwunsch!",
+    nextCoords: null
+  }
+];
+
+const FINAL_STORY = "Jupp Thelen gesteht. Als selbsternannter, aber nie lizenzierter Stadtführer kannte er jeden Winkel der Altstadt - und jede Schwachstelle der historischen Brauhäuser. Seit Jahren hatte er kleinste Requisiten und historische Fundstücke aus Kölns Traditionslokalen als angebliche 'echte Reliquien' an Touristen verkauft. Das goldene Original-Brauereisiegel aus der Gründerzeit des 'Früh am Dom' sollte sein größter Coup werden: ein Verkauf an einen zwielichtigen Sammler noch in dieser Woche. Dank deiner Ermittlung quer durch die Altstadt konnte der Deal verhindert werden - das Siegel kehrt unversehrt an seinen rechtmäßigen Platz im Brauhaus zurück, wo es seit 1904 die Kölner Biergeschichte feiert.";
+
+/* ============================================================
+   APP-LOGIK
+   ============================================================ */
+const STORAGE_KEY = "koeln_dreikoenigs_case_v1";
+let state = loadState();
+let timerInterval = null;
+
+function loadState(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(raw) return JSON.parse(raw);
+  }catch(e){}
+  return {started:false, step:0, phase:"riddle", startTime:null, finished:false, endTime:null};
+}
+function saveState(){
+  try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }catch(e){}
+}
+function showScreen(name){
+  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+  document.getElementById("screen-"+name).classList.add("active");
+}
+function startGame(){
+  state = {started:true, step:0, phase:"riddle", startTime:Date.now(), finished:false, endTime:null};
+  saveState();
+  showScreen("game");
+  startTimer();
+  renderGame();
+}
+function resetGame(){
+  localStorage.removeItem(STORAGE_KEY);
+  state = loadState();
+  stopTimer();
+  showScreen("welcome");
+}
+function startTimer(){
+  stopTimer();
+  updateTimerDisplay();
+  timerInterval = setInterval(updateTimerDisplay, 1000);
+}
+function stopTimer(){
+  if(timerInterval) clearInterval(timerInterval);
+  timerInterval = null;
+}
+function formatElapsed(ms){
+  const totalSec = Math.floor(ms/1000);
+  const h = String(Math.floor(totalSec/3600)).padStart(2,"0");
+  const m = String(Math.floor((totalSec%3600)/60)).padStart(2,"0");
+  const s = String(totalSec%60).padStart(2,"0");
+  return h+":"+m+":"+s;
+}
+function updateTimerDisplay(){
+  if(!state.startTime) return;
+  const end = state.finished && state.endTime ? state.endTime : Date.now();
+  document.getElementById("timer").textContent = formatElapsed(end - state.startTime);
+}
+function renderTabs(){
+  const tabs = document.getElementById("tabs");
+  tabs.innerHTML = "";
+  for(let i=0;i<PUZZLES.length;i++){
+    const div = document.createElement("div");
+    div.className = "tab" + (i < state.step ? " done" : (i === state.step ? " current" : ""));
+    div.textContent = String(i+1).padStart(2,"0");
+    tabs.appendChild(div);
+  }
+}
+function renderGame(){
+  renderTabs();
+  const body = document.getElementById("gameBody");
+  const idx = state.step;
+  const puzzle = PUZZLES[idx];
+
+  if(state.phase === "riddle"){
+    body.innerHTML = `
+      <div class="eyebrow">Kapitel ${idx+1} von ${PUZZLES.length}</div>
+      <p>${puzzle.scene}</p>
+      <div class="onsite-tag">${puzzle.onsite || "Vor Ort prüfen"}</div>
+      <div class="riddle-box">${puzzle.riddle}</div>
+      <button class="hint-toggle" id="hintBtn">Hinweis anzeigen</button>
+      <div class="hint-text" id="hintText">${puzzle.hint}</div>
+      <input type="text" id="answerInput" placeholder="Deine Antwort" autocomplete="off" autocapitalize="off" autocorrect="off">
+      <div class="error-msg" id="errorMsg">Das ist es noch nicht. Versuch's nochmal.</div>
+      <button class="btn primary" id="submitBtn">Antwort prüfen</button>
+    `;
+    document.getElementById("hintBtn").onclick = () => {
+      document.getElementById("hintText").style.display = "block";
+      document.getElementById("hintBtn").style.display = "none";
+    };
+    const submit = () => {
+      const val = document.getElementById("answerInput").value.trim().toLowerCase();
+      const ok = puzzle.answers.some(a => a.toLowerCase() === val);
+      if(ok){
+        state.phase = "story";
+        saveState();
+        renderGame();
+      } else {
+        document.getElementById("errorMsg").style.display = "block";
+      }
+    };
+    document.getElementById("submitBtn").onclick = submit;
+    document.getElementById("answerInput").addEventListener("keydown", e=>{
+      if(e.key === "Enter") submit();
+    });
+  }
+
+  else if(state.phase === "story"){
+    const isLast = idx === PUZZLES.length - 1;
+    if(isLast){
+      finishGame();
+      return;
+    }
+    const coords = puzzle.nextCoords;
+    const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${coords.lat},${coords.lon}`;
+    body.innerHTML = `
+      <div class="card" style="position:relative;">
+        <div class="stamp" id="stampEl">GELÖST</div>
+        <p>${puzzle.solved}</p>
+      </div>
+      <div class="coord-box">
+        <div class="coord-label">Nächster Standort: ${coords.label}</div>
+        <div class="coord-value">${coords.lat}, ${coords.lon}</div>
+        <div class="coord-dist">ca. ${coords.distKm} km Fußweg von hier</div>
+        <div class="coord-actions">
+          <button id="copyBtn">In Zwischenablage kopieren</button>
+          <a href="${mapsUrl}" target="_blank" rel="noopener">In Google Maps öffnen</a>
+        </div>
+      </div>
+      <div style="flex:1"></div>
+      <button class="btn primary" id="arrivedBtn">Ich bin angekommen – nächstes Rätsel</button>
+    `;
+    requestAnimationFrame(()=> document.getElementById("stampEl").classList.add("show"));
+    document.getElementById("copyBtn").onclick = async (e) => {
+      const text = coords.lat + ", " + coords.lon;
+      try{ await navigator.clipboard.writeText(text); }
+      catch(err){
+        const ta = document.createElement("textarea");
+        ta.value = text; document.body.appendChild(ta); ta.select();
+        document.execCommand("copy"); document.body.removeChild(ta);
+      }
+      e.target.textContent = "Kopiert ✓";
+      e.target.classList.add("copied");
+      setTimeout(()=>{ e.target.textContent = "In Zwischenablage kopieren"; e.target.classList.remove("copied"); }, 1800);
+    };
+    document.getElementById("arrivedBtn").onclick = () => {
+      state.step = idx + 1;
+      state.phase = "riddle";
+      saveState();
+      renderGame();
+    };
+  }
+}
+function finishGame(){
+  state.finished = true;
+  state.endTime = Date.now();
+  saveState();
+  stopTimer();
+  document.getElementById("finishedStory").innerHTML = `<p>${FINAL_STORY}</p>`;
+  document.getElementById("finalTime").textContent = formatElapsed(state.endTime - state.startTime);
+  showScreen("finished");
+}
+(function init(){
+  if(state.finished){
+    document.getElementById("finishedStory").innerHTML = `<p>${FINAL_STORY}</p>`;
+    document.getElementById("finalTime").textContent = formatElapsed(state.endTime - state.startTime);
+    showScreen("finished");
+  } else if(state.started){
+    showScreen("game");
+    startTimer();
+    renderGame();
+  } else {
+    showScreen("welcome");
+  }
+})();
+</script>
+</body>
+</html>
