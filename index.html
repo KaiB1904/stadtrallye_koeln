@@ -12,7 +12,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg: #0f111b;
+    --bg: #0f111a;
     --surface: #191c28;
     --border: #2b3042;
     --amber: #d3a24f;
@@ -286,6 +286,9 @@
   <section class="screen" id="screen-game" style="padding:0;">
     <div id="gameHeader">
       <div>
+        <button onclick="goBack()" style="background:none; border:none; color:var(--amber); font-family:'JetBrains Mono',monospace; font-size:12px; cursor:pointer; padding:0 0 6px 0; display:block;">
+          ← Zurück
+        </button>
         <div class="label">Akte D-1164</div>
         <div class="tabs" id="tabs"></div>
       </div>
@@ -346,30 +349,30 @@ const PUZZLES = [
     nextCoords: {lat:"50.938583", lon:"6.961562", label:"Groß St. Martin", distKm:"0,5"}
   },
   {
-    scene: "Groß St. Martin ist mit seinem markanten Vierungsturm eines der Wahrzeichen der Altstadt und war bis 1880 das höchste Bauwerk Kölns. Steh so, dass du den quadratischen Hauptturm gut siehst.",
+    scene: "Groß St. Martin ist mit seinem markanten Vierungsturm eines der Wahrzeichen der Altstadt und war bis 1880 das höchste Bauwerk Kölns. Du stehst direkt auf dem Fischmarkt und dieser war jahrhundertelang das Zentrum des Kölner Fischhandels - direkt am Rhein, wo die Fänge angelandet wurden. Das im 13. Jahrhundert verliehene Kölner Stapelrecht verpflichtete vorbeifahrende Händler dazu, ihre Waren – darunter auch Seefisch aus Holland – drei Tage lang den Kölner Bürgern auf dem Markt anzubieten. Steh so, dass du den quadratischen Hauptturm gut siehst.",
     onsite: "Blick von der Rheinseite oder vom Fischmarkt auf den Turm",
-    riddle: "Um den quadratischen Hauptturm gruppieren sich kleinere Ecktürmchen. Wie viele sind es?",
-    hint: "An jeder der vier Ecken des Hauptturms sitzt eines.",
+    riddle: "Ich bin die Anzahl der Buchstaben in meiner eigenen Antwort. Wie lautet die Zahl?",
+    hint: "Zähle die Türmchen an jeder der vier Ecken des Hauptturms.",
     answers: ["4", "vier"],
     solved: "4 Ecktürmchen - genau richtig. Am Fuß der Kirche, wo die alten Häuser fast ins Wasser reichen, soll der Mann zuletzt gesehen worden sein.",
-    nextCoords: {lat:"50.938305", lon:"6.962103", label:"Fischmarkt", distKm:"0,1"}
+    nextCoords: {lat:"50.9381", lon:"6.9623207", label:"Tünnes und Schäl", distKm:"0,16"}
   },
   {
-    scene: "Der Fischmarkt war jahrhundertelang das Zentrum des Kölner Fischhandels - direkt am Rhein, wo die Fänge angelandet wurden. Ein Anwohner deutet auf eine kleine Infotafel am Platz.",
-    onsite: "Suche die Infotafel oder frage nach der Bedeutung des Platznamens",
-    riddle: "Wonach ist dieser Platz benannt - welche Ware wurde hier früher direkt von den Booten verkauft?",
-    hint: "Der Name des Platzes verrät es dir bereits.",
-    answers: ["fisch", "fische"],
-    solved: "FISCH - richtig. Eine Souvenirverkäuferin auf dem Weg zum Alter Markt erinnert sich an den Mann: Er blieb lange vor dem großen Brunnen mit der Reiterstatue stehen und murmelte etwas von einer Frau namens Griet.",
-    nextCoords: {lat:"50.938624", lon:"6.960016", label:"Jan-von-Werth-Brunnen, Alter Markt", distKm:"0,15"}
+    scene: "Du biegst in das kleine Gässchen nahe Groß St. Martin ein und stehst vor zwei bekannten lebensgroßen Bronzefiguren: Tünnes und Schäl! Die beiden Hänneschen-Figuren verkörpern wie keine anderen die kölsche Seele – der bauernschlaue, gutmütige Tünnes im blauen Kittel und der schielende, feingliedrige Schäl im Frack. Ein Passant erzählt dir stolz, dass das Berühren von Tünnes' dicker Nase Glück und finanziellen Segen bringen soll.",
+    onsite: "Suche die Infotafel hinter den beiden Figuren",
+    riddle: "Laut der Infotafel logieren Tünnes und Schäl hier im Hanenhaus bei einem ganz bestimmten Kölner Freund. Wie heißt dieser Gastfreund? (Vor- und Nachname)",
+    hint: "Suche auf der Tafel nach dem Satz 'Hier im Hanenhaus logieren...'",
+    answers: ["Jupp Engels", "jupp engels", "JUPP ENGELS"],
+    solved: "JUPP ENGELS - richtig. Eine Souvenirverkäuferin auf dem Weg zum Alter Markt erinnert sich an den Mann: Er blieb lange vor dem großen Brunnen mit der Reiterstatue stehen und murmelte etwas von einer Frau namens Griet.",
+    nextCoords: {lat:"50.938624", lon:"6.960016", label:"Jan-von-Werth-Brunnen, Alter Markt", distKm:"0,1"}
   },
   {
-    scene: "Der Jan-von-Werth-Brunnen auf dem Alter Markt erzählt eine der bekanntesten Kölner Liebeslegenden: Ein armer Knecht wird von einer Magd verschmäht, zieht in den Krieg und kehrt als hochdekorierter General zurück - zu spät für die Liebe.",
-    onsite: "Lies die Inschrift oder das Hinweisschild am Brunnen",
-    riddle: "Wie heißt die Frau, die Jan von Werths Heiratsantrag einst ablehnte und ihn Jahre später als General bereute, ihn verschmäht zu haben?",
-    hint: "Ihr Name reimt sich auf 'Diet' und beginnt mit G.",
-    answers: ["griet"],
-    solved: "GRIET - richtig. Ein Kellner am Platz erinnert sich, dass derselbe Mann kurz darauf nach oben zu einem Hausdach schaute und lachte - genau dorthin, wo eine besonders freche Kölner Figur sitzt.",
+    scene: "Der Jan-von-Werth-Brunnen auf dem Alter Markt erzählt eine der bekanntesten Kölner Liebeslegenden: Im 17. Jahrhundert verliebte sich der arme Kölner Bauernknecht Jan in die hübsche Magd Griet und hielt um ihre Hand an. Griet wies ihn jedoch spöttisch ab, da er ihr nicht wohlhabend genug war und sie sich eine bessere Partie erhoffte. Zutiefst enttäuscht verließ Jan die Stadt, zog als Söldner in den Dreißigjährigen Krieg und stieg durch Mut und Verstand bis zum hochdekorierten Reitergeneral Jan von Werth auf. Als er Jahre später im Triumphzug nach Köln zurückkehrte, traf er am Markt auf Griet, die inzwischen alt geworden war und als einfache Obstverkäuferin ihr Dasein fristete. Der General hielt sein Pferd an und rief ihr wehmütig zu: „Griet, wer et hätt jedonn!“ („Griet, hättest du es damals nur getan!“), worauf sie seufzend antwortete: „Jan, wer et hätt jewoss!“ („Jan, wer hätte das wissen können!“) – eine sprichwörtliche Anekdote über verpasste Lebenschancen, die in Köln bis heute unvergessen ist.",
+    onsite: "Lies die Inschrift am Brunnen",
+    riddle: "Karl Cramer schrieb 1837 das mundartliche Gedicht „Jan un Griet“ in Kölner Reimform. Wie lange hat er gelebt?",
+    hint: "Du findest sein Geburts- und Todestag am Brunnen.",
+    answers: ["56", "56 Jahre","56 jahre","56 JAHRE", ],
+    solved: "56 Jahre - richtig. Ein Köbes am Platz erinnert sich, dass derselbe Mann kurz darauf nach oben zu einem Hausdach schaute und lachte - genau dorthin, wo eine besonders freche Kölner Figur sitzt.",
     nextCoords: {lat:"50.938129", lon:"6.960485", label:"Kallendresser, Alter Markt 24", distKm:"0,07"}
   },
   {
@@ -377,17 +380,17 @@ const PUZZLES = [
     onsite: "Schau nach oben zum Dach von Haus Nr. 24",
     riddle: "Welchen Körperteil streckt die Figur allen Passanten und besonders der Obrigkeit am Rathaus gegenüber entgegen?",
     hint: "Sein Name bedeutet übersetzt in etwa 'Regenrinnenscheißer'.",
-    answers: ["hintern", "den hintern", "po", "gesäss", "gesäß", "hinterteil", "der hintern"],
+    answers: ["hintern", "den hintern", "po", "gesäss", "gesäß", "hinterteil", "der hintern", "Popo", "Po", "Arsch"],
     solved: "Der nackte Hintern - genau. Ein Marktstandbetreiber will den Mann kurz danach beim Rathaus gesehen haben, wo er sich eine ganze Weile den Turm mit den vielen Figuren angeschaut hat.",
     nextCoords: {lat:"50.938492", lon:"6.959320", label:"Historisches Rathaus, Rathausturm", distKm:"0,1"}
   },
   {
-    scene: "Der Rathausturm trägt 124 Figuren bedeutender Kölner Persönlichkeiten. Direkt unter der Turmuhr sitzt eine ganz besondere hölzerne Fratzenfigur.",
-    onsite: "Schau unter die Turmuhr am Rathausturm (am besten zur vollen Stunde)",
-    riddle: "Zur vollen Stunde öffnet diese geschnitzte Figur den Mund und streckt die Zunge heraus. Wie heißt sie im Kölschen?",
-    hint: "Der Name beginnt mit 'Platz' - er 'jabbeckt' (schwatzt/reckt die Zunge) zur vollen Stunde.",
-    answers: ["platzjabbeck", "der platzjabbeck"],
-    solved: "PLATZJABBECK - richtig! Ein Wachmann am Rathaus erinnert sich jetzt genau: Der Mann trug eine Tasche mit dem Logo eines bekannten Duftmuseums und roch stark nach einem süßlichen Parfum.",
+    scene: "Der Rathausturm trägt 124 Figuren bedeutender Kölner Persönlichkeiten. Direkt unter der Turmuhr sitzt die ganz besondere hölzerne Fratzenfigur Platzjabbeck. Zur vollen Stunde öffnet diese geschnitzte Figur den Mund und streckt die Zunge heraus.",
+    onsite: "Schau dir die Figuren am Rathausturm genau an.",
+    riddle: "Wir suchen die Skulptur eines römischen Feldherrn und Politikers. Er ist der Gründer der Stadt Köln. Wie ist sein Name?",
+    hint: "Die Skulptur befindet sich direkt neben Augustus.",
+    answers: ["Agrippa", "agrippa", "AGRIPPA"],
+    solved: "Agrippa - richtig! Ein Wachmann am Rathaus erinnert sich jetzt genau: Der Mann trug eine Tasche mit dem Logo eines bekannten Duftmuseums und roch stark nach einem süßlichen Parfum.",
     nextCoords: {lat:"50.937721", lon:"6.958082", label:"Duftmuseum im Farina-Haus", distKm:"0,12"}
   },
   {
@@ -395,26 +398,26 @@ const PUZZLES = [
     onsite: "Schau ins Schaufenster oder auf die Flaschen im Verkaufsraum",
     riddle: "Welches Symbol ziert seit der Gründung jede Flasche des Original Eau de Cologne aus diesem Haus?",
     hint: "Es ist eine Blume - damals selten und teuer, heute das Markenzeichen.",
-    answers: ["tulpe", "die tulpe", "eine tulpe", "rote tulpe"],
+    answers: ["tulpe", "die tulpe", "eine tulpe", "rote tulpe", "Tulpe"],
     solved: "Die rote TULPE - korrekt. Der Verkäufer erinnert sich an einen hastigen Kunden, der nach dem Weg zurück zum Dom fragte. Die Spur führt dich fast zurück zum Ausgangspunkt.",
-    nextCoords: {lat:"50.941278", lon:"6.958281", label:"Domvorplatz (Roncalliplatz)", distKm:"0,4"}
+    nextCoords: {lat:"50.938609", lon:"6.9584685", label:"Römischer Abwasserkanal", distKm:"0,2"}
   },
   {
-    scene: "Zurück auf dem Domvorplatz. Der Kölner Dom ist eine der am längsten gebauten Kathedralen der Welt - Grundsteinlegung 1248, doch die Türme wurden erst 1880 vollendet.",
-    onsite: "Steh vor dem Dom und blicke an der Fassade nach oben",
-    riddle: "Wie viele Jahre lagen zwischen der Grundsteinlegung 1248 und der Vollendung der Türme 1880?",
-    hint: "Rechne 1880 minus 1248.",
-    answers: ["632", "632 jahre"],
-    solved: "Richtig! Unglaubliche 632 Jahre hat es gedauert. Stell dir das mal vor: Fast 300 Jahre davon stand der Dom als Bauruine in der Stadt – mit einem riesigen, hölzernen Baukran auf dem unfertigen Südturm, der das Kölner Stadtbild über Jahrhunderte prägte. Erst im 19. Jahrhundert packte die Kölner der Ehrgeiz, ihr Meisterwerk nach den mittelalterlichen Originalplänen zu Ende zu bringen. Als die Spitzen 1880 endlich fertig waren, war der Dom für ein paar Jahre sogar das höchste Gebäude der Welt! Ein echtes Denkmal kölscher Ausdauer.",
-    nextCoords: {lat:"50.941278", lon:"6.958281", label:"Domvorplatz (Roncalliplatz)", distKm:"0"}
+    scene: "Die Verfolgung führt dich in eine kleine Gasse nahe dem Rathaus. Hier stieß man beim Bau der modernen Kanalisation auf ein spektakuläres Erbe der Antike: ein frei stehendes Teilstück der alten römischen Kanalisation! Schon vor 2.000 Jahren besaß Köln (CCAA) ein gigantisches unterirdisches Abwassersystem mit gemauerten Gewölbekanälen, die groß genug waren, dass Menschen darin stehen konnten. Perfekt, um darin unterzutauchen...",
+    onsite: "Tritt an das ausgestellte gemauerte Stück des römischen Abwasserkanals heran",
+    riddle: "In welcher Tiefe befand sich das Teilstück des römischen Abwasserkanals ursprünglich?",
+    hint: "Lies dir die Infotafel aufmerksam durch.",
+    answers: ["9", "9 Meter", "9 meter", "9m"],
+    solved: "9 Meter – exakt! Kaum zu glauben, wie gut das antike Mauerwerk erhalten ist. Ein Straßenreiniger hat gesehen, wie der Dieb nahe dem Dom wieder aus einem Schacht geklettert ist!",
+    nextCoords: {lat:"50.941278", lon:"6.958281", label:"Domvorplatz (Roncalliplatz)", distKm:"0,2"}
   },
   {
-    scene: "Genau in diesem Moment siehst du ihn: einen Mann, der sich am Rand der Domplatte auffällig unauffällig verhält - eine Tasche mit Farina-Logo über der Schulter. Domwächterin Berger reicht dir einen zerknitterten Zettel, den sie ihm aus der Tasche fallen sah. Darauf steht, rückwärts geschrieben, ein Name.",
+    scene: "Zurück auf dem Domvorplatz. Der Kölner Dom ist eine der am längsten gebauten Kathedralen der Welt - Grundsteinlegung 1248, doch die Türme wurden erst 1880 vollendet. Genau in diesem Moment siehst du ihn: einen Mann, der sich am Rand der Domplatte auffällig unauffällig verhält - eine Tasche mit Farina-Logo über der Schulter. Domwächterin Berger reicht dir einen zerknitterten Zettel, den sie ihm aus der Tasche fallen sah.",
     onsite: "Löse den letzten Hinweis und stelle dich dem Täter",
-    riddle: "Auf dem Zettel steht rückwärts: NELEHT PPUJ. Wie lautet der Name richtig herum? (Vor- und Nachname)",
-    hint: "Lies die beiden Wörter jeweils von hinten nach vorne.",
-    answers: ["jupp thelen", "thelen jupp"],
-    solved: "Ihr habt den Dieb geschnappt! Jupp Thelen wurde überführt. Herzlichen Glückwunsch!",
+    riddle: "Auf dem Zettel steht: 'Wir treffen uns beim Brunnen mit den Wasserspeihenden Löwen. Ich bin dort, wenn die Zeit, die seit Mitternacht vergangen ist, genau drei Fünftel der Zeit beträgt, die bis zum nächsten Mittag noch verbleibt.' Um wieviel Uhr (HH:MM) kannst du den Dieb an diesem Ort erwischen?",
+    hint: "Uhrzeit = (12 Stunden im Verhältnis von 3 zu 5 [12/(3 + 5 = 8)]) * 3",
+    answers: ["04:30 Uhr", "04:30"],
+    solved: "Ihr verstädndigt die Polizei und wartet bis 04:30 Uhr an diesem Platz. Der Dieb taucht auf und ihr habt ihn geschnappt! Jupp Thelen wurde überführt. Herzlichen Glückwunsch!",
     nextCoords: null
   }
 ];
@@ -485,6 +488,18 @@ function renderTabs(){
     div.textContent = String(i+1).padStart(2,"0");
     tabs.appendChild(div);
   }
+}
+function goBack() {
+  if (state.phase === "story") {
+    // Wenn man auf der Zwischenseite/Story ist, zurück zum Rätsel dieser Station
+    state.phase = "riddle";
+  } else if (state.phase === "riddle" && state.step > 0) {
+    // Wenn man beim Rätsel ist, zurück zur Story der vorherigen Station
+    state.step--;
+    state.phase = "story";
+  }
+  saveState();
+  renderGame();
 }
 function renderGame(){
   renderTabs();
